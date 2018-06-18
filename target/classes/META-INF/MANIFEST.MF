@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: admin
+Build-Jdk: 9.0.4
+Implementation-Title: starrynight
+Implementation-Version: 0.0.1
+Implementation-Vendor-Id: com.starryard
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/starrynight
+Created-By: Maven Integration for Eclipse
+

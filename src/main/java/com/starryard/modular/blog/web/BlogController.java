@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.starryard.modular.blog.dao.BlogDao;
 import com.starryard.modular.blog.entity.Content;
 
+import lombok.val;
+
 @Controller
 @RequestMapping("blog")
 public class BlogController {
@@ -29,14 +31,14 @@ public class BlogController {
 	
 	
 	@GetMapping("list/{page}")
-	public ModelAndView list(@PathVariable(required=false) Integer page,ModelAndView mv) {
+	public ModelAndView list(@PathVariable(required=false) Integer page, ModelAndView mv) {
 		mv.setViewName(PREFIX+"list");
-		int size = 10;
-		Pageable pageable = PageRequest.of(Optional.of(page).orElse(0), size, Direction.DESC, "cid");
-		Page<Content> pageContent = blog.findAll(pageable);
+		val size = 10;
+		val pageable = PageRequest.of(Optional.of(page).orElse(0), size, Direction.DESC, "cid");
+		val pageContent = blog.findAll(pageable);
 		mv.addObject("list",pageContent.getContent());
-		Pageable prev = pageContent.getPageable().previousOrFirst();
-		Pageable next = pageContent.getPageable().next();
+		val prev = pageContent.getPageable().previousOrFirst();
+		val next = pageContent.getPageable().next();
 		mv.addObject("prev",prev.getPageNumber());
 		mv.addObject("next",pageContent.getTotalPages() > next.getPageNumber()?next.getPageNumber():pageContent.getNumber());
 		return mv;
@@ -45,9 +47,9 @@ public class BlogController {
 	@GetMapping("article/{cid}")
 	public ModelAndView page(@PathVariable Integer cid,ModelAndView mv) {
 		mv.setViewName(PREFIX+"page");
-		Optional<Content> opt = blog.findById(cid);
+		val opt = blog.findById(cid);
 		if(opt.isPresent()) {
-			StringBuilder sb = new StringBuilder(opt.get().getText());
+			val sb = new StringBuilder(opt.get().getText());
 			opt.get().setText(sb.substring(sb.indexOf(MARK)+MARK.length()));
 		};
 		mv.addObject("content",opt.orElse(new Content()));
