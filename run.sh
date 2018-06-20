@@ -1,6 +1,14 @@
 #!/bin/sh
+
+export ENVIRONMENT=prd
+echo "当前环境为$ENVIRONMENT"
+
+logfile=/var/log/starrynight.log
+touch $logfile
+
 start(){
-    nohup java -jar target/starrynight-0.0.1.jar -Dspring.profiles.active="prd"  2>&1 &
+    nohup java -jar target/starrynight-0.0.1.jar -Dspring.profiles.active=prd > $logfile  2>&1 &
+    tailf $logfile
 }
 
 stop(){
