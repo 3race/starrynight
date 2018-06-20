@@ -1,5 +1,30 @@
-
+server:
+  port: 80
+  http2:
+    enabled: true
 spring:
   profiles:
     active:
     - ${ENVIRONMENT:dev}
+  mvc:
+    favicon:
+      enabled: true
+  freemarker:
+    suffix: .html
+    cache: false
+    settings:
+      template_exception_handler: rethrow
+  jpa:
+    show-sql: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: null
+    timeout: 5000
+    database: 0
+    jedis:
+      pool:
+        min-idle: 1
+        max-idle: 20
+        max-active: 20
+        max-wait: 60000
