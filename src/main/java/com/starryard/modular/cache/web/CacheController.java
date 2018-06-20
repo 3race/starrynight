@@ -22,10 +22,6 @@ public class CacheController {
 	@Autowired
 	private StringRedisTemplate stringRedis;
 	
-	@Autowired private RedisTemplate<String, Object> redis;
-	
-	@Autowired private ReactiveRedisTemplate<String, Object> reactRedis;
-	
 	private final Map<String,String> SUCCESS = new HashMap() {{put("msg","success");}};
 	private final Map<String,String> FAIL = new HashMap() {{put("msg","fail");}};
 	
@@ -41,6 +37,7 @@ public class CacheController {
 			val cachedValue = stringRedis.opsForValue().get(key);
 			return new HashMap() {{put(key,cachedValue);}};
 		case "del":
+			stringRedis.delete(key);
 			return new ResponseEntity<>(HttpStatus.OK);
 		default:
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

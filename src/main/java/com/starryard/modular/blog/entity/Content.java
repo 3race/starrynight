@@ -1,14 +1,19 @@
 package com.starryard.modular.blog.entity;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.cache.annotation.CacheConfig;
 
 import lombok.Data;
 
 @Entity
 @Table(name="typecho_contents")
 @Data
+@Cacheable(true)
+@CacheConfig()
 public class Content {
 	@Id
 	/** 序号*/
