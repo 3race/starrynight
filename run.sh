@@ -15,7 +15,7 @@ count=`echo $pid | grep -v '^$' | wc -l`
 
 basepath=$(cd `dirname $0`; pwd)
 echo "basepath=$basepath"
-logfile=/var/tmp/starrynight.log
+logfile=/var/log/starrynight.log
 
 echo "logfile=$logfile"
 
@@ -29,8 +29,11 @@ start(){
         # 返回异常退出
         return 1
     fi
+    # cd $basepath
+    # nohup mvn spring-boot:run -Dmaven.test.skip=true -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
     cd $basepath
-    nohup mvn spring-boot:run -Dmaven.test.skip=true -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
+    mvn package -Dmaven.test.skip=true
+    nohup java -jar $basepath/target/starrynight-0.0.1.jar -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
     if [ "$PROFILE"x = "dev"x ] ; then
         touch $logfile
         tailf $logfile
