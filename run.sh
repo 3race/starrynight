@@ -14,7 +14,11 @@ pid=$(ps -ef | grep java | grep spring-boot | grep -v grep | awk '{print $2}')
 count=`echo $pid | grep -v '^$' | wc -l`
 
 basepath=$(cd `dirname $0`; pwd)
+echo "basepath=$basepath"
 logfile=/var/tmp/starrynight.log
+
+echo "logfile=$logfile"
+
 jarname=spring-boot:run
 
 start(){
@@ -25,6 +29,7 @@ start(){
         # 返回异常退出
         return 1
     fi
+    cd $basepath
     nohup mvn spring-boot:run -Dmaven.test.skip=true -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
     if [ "$PROFILE"x = "dev"x ] ; then
         touch $logfile
