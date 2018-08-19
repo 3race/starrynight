@@ -15,8 +15,10 @@ count=`echo $pid | grep -v '^$' | wc -l`
 
 basepath=$(cd `dirname $0`; pwd)
 echo "basepath=$basepath"
-logfile=/var/log/starrynight.log
-
+logdir=~/log
+mkdir -p -m 755 $logdir
+logfile=$logdir/starrynight.log
+touch $logfile
 echo "logfile=$logfile"
 
 jarname=spring-boot:run
