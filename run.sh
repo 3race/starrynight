@@ -10,14 +10,26 @@ fi
 
 echo "当前环境配置为$PROFILE"
 
+pid=$(ps -ef | grep java | grep spring-boot | grep -v grep | awk '{print $2}')
+count=`echo $pid | grep -v '^$' | wc -l`
+
 basepath=$(cd `dirname $0`; pwd)
 logfile=/var/tmp/starrynight.log
+jarname=spring-boot:run
 
 start(){
     # nohup java -jar $basepath/target/starrynight-0.0.1.jar -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
+    # 检查是否已有进程在运行
+    if [ $count -ne 0 ] ; then
+        echo "已有$count个进程在运行,请停止后再尝试启动新进程"
+        # 返回异常退出
+        return 1
+    fi
     nohup mvn spring-boot:run -Dmaven.test.skip=true -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
-    touch $logfile
-    tailf $logfile
+    if [ "$PROFILE"x = "dev"x ] ; then
+        touch $logfile
+        tailf $logfile
+    fi
 }
 
 stop(){
@@ -25,8 +37,7 @@ stop(){
         echo "需要以root权限执行"
         return 1
     fi
-    pid=`ps -ef | grep 'target/starrynight' | grep -v 'grep' | awk '{print $2}'`
-    count=`echo $pid | grep -v '^$' | wc -l`
+    # pid=`ps -ef | grep 'target/starrynight' | grep -v 'grep' | awk '{print $2}'`
     if [ $count  -ne 0 ] ; then
         echo "已有$count个进程"
         for id in $pid 
