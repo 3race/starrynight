@@ -3,11 +3,12 @@
 export ENVIRONMENT=prd
 echo "当前环境为$ENVIRONMENT"
 
+basepath=$(cd `dirname $0`; pwd)
 logfile=/var/log/starrynight.log
 touch $logfile
 
 start(){
-    nohup java -jar target/starrynight-0.0.1.jar -Dspring.profiles.active=prd > $logfile  2>&1 &
+    nohup java -jar $basepath/target/starrynight-0.0.1.jar -Dspring.profiles.active=prd > $logfile  2>&1 &
     tailf $logfile
 }
 
@@ -16,7 +17,7 @@ stop(){
         echo "需要以root权限执行"
         return 1
     fi
-    pid=`ps -ef | grep 'java -jar target/starrynight' | grep -v 'grep' | awk '{print $2}'`
+    pid=`ps -ef | grep 'target/starrynight' | grep -v 'grep' | awk '{print $2}'`
     count=`echo $pid | grep -v '^$' | wc -l`
     if [ $count  -ne 0 ] ; then
         echo "已有$count个进程"
