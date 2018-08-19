@@ -1,5 +1,4 @@
 server:
-  port: 80
   http2:
     enabled: true
 spring:
@@ -11,11 +10,8 @@ spring:
       enabled: true
   freemarker:
     suffix: .html
-    cache: false
     settings:
-      template_exception_handler: rethrow
-  jpa:
-    show-sql: true
+      template_exception_handler: rethrow # freemark捕获异常后直接抛出
   redis:
     host: 127.0.0.1
     port: 6379

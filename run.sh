@@ -1,14 +1,22 @@
 #!/bin/sh
 
-export ENVIRONMENT=prd
-echo "当前环境为$ENVIRONMENT"
+if [ -n "$2" ] ;
+then
+    echo "参数中提供了环境信息"
+    PROFILE="$2"
+else
+    PROFILE=dev
+fi
+
+echo "当前环境配置为$PROFILE"
 
 basepath=$(cd `dirname $0`; pwd)
-logfile=/var/log/starrynight.log
-touch $logfile
+logfile=/var/tmp/starrynight.log
 
 start(){
-    nohup java -jar $basepath/target/starrynight-0.0.1.jar -Dspring.profiles.active=prd > $logfile  2>&1 &
+    # nohup java -jar $basepath/target/starrynight-0.0.1.jar -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
+    nohup mvn spring-boot:run -Dmaven.test.skip=true -Dspring.profiles.active=$PROFILE > $logfile  2>&1 &
+    touch $logfile
     tailf $logfile
 }
 
@@ -32,7 +40,7 @@ stop(){
     fi
 }
 help(){
-    echo "Usage: start|stop|restart"
+    echo "Usage: (start|stop|restart) [dev|prd]"
 }
 
 case $1 in
